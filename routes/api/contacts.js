@@ -78,39 +78,26 @@ router.put('/:contactId', async (req, res, next) => {
   }
 })
 
-// router.patch('/:contactId/favorite', async (req, res, next) => {
-//   try {
-//     const { error } = contactsSchema.validate(req.body);
-//     if (error) {
-//       throw HttpError(400, error.message)
-//     }
-//     const { contactId } = req.params;
-//     const result = await Contact.findByIdAndUpdate({ _id: contactId }, req.body, { new: true });
-//     if (!result) {
-//       next(HttpError(404, "Not found"));
-//       return;
-//     }
-//     res.json(result)
-//   } catch (error) {
-//     next(error)
-//   }
-// })
+
 router.patch('/:contactId/favorite', async (req, res, next) => {
   try {
     const { error } = contactsSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message)
     }
-    const { contactId } = req.params;
-    const result = await Contact.findByIdAndUpdate({ _id: contactId }, req.body, { new: true });
-    if (!result) {
-      next(HttpError(404, "Not found"));
-      return;
+    if (!req.body) {
+      throw HttpError(400, "Missing field favorite")
     }
-    res.json(result)
+    const { contactId } = req.params;
+  
+    const updateStatusContact = await Contact.findByIdAndUpdate({ _id: contactId }, req.body, { new: true });
+    if (!updateStatusContact) {
+      next(HttpError(404, "Not found"));
+    }
+    res.json(updateStatusContact)
   } catch (error) {
     next(error)
   }
-})
+});
 
 module.exports = router;
