@@ -1,7 +1,7 @@
 const fs = require('fs/promises');
 const path = require("path");
 const { HttpError } = require("../../helpers");
-
+const { resizeAvatar } = require("../../middlewares");
 
 const { User } = require("../../models/user");
 
@@ -9,6 +9,7 @@ const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
 const updateAvatar = async (req, res) => {
     const { path: tempUpload, originalname } = req.file;
+    await resizeAvatar(tempUpload);
     const { _id } = req.user;
 
     const filename = `${_id}_${originalname}`;
