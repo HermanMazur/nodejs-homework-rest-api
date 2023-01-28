@@ -11,7 +11,7 @@ router.get('/verify/:verificationToken', ctrlWrapper(ctrl.verify));
 
 router.post('/verify', validateBody(schemas.joiEmailSchema), ctrlWrapper(ctrl.resendVerifyEmail));
 
-// 
+
 
 router.post('/login', validateBody(schemas.joiLoginSchema), ctrlWrapper(ctrl.loginUser));
 
