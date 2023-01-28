@@ -5,15 +5,15 @@ const { BASE_URL } = process.env;
 
 const resendVerifyEmail = async (req, res) => {
     const { email } = req.body;
-    const user = User.findOne({ email });
+    const user = await User.findOne({ email });
     if (!user || user.verify) {
-        throw HttpError(404)
+        throw HttpError(404, "Verification was already passed")
     }
 
     const verifyEmail = {
         to: email,
         subject: "Verify you email",
-        html:`<a target="_blank" href="${BASE_URL}api/user/verify/${user.verificationToken}">Click verify email</a>`
+        html:`<a target="_blank" href="${BASE_URL}api/users/verify/${user.verificationToken}">Click verify email</a>`
     }
 
     await sendEmail(verifyEmail);
@@ -22,8 +22,5 @@ const resendVerifyEmail = async (req, res) => {
         message:"Verification email sent"
     })
 }
-
-
-
 
 module.exports = resendVerifyEmail;
